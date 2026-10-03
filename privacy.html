@@ -14,13 +14,14 @@
 
   <p class="eyebrow">Privacy policy</p>
   <h1>Your training is yours</h1>
-  <p class="meta">Last updated 1 October 2026</p>
+  <p class="meta">Last updated 3 October 2026</p>
 
   <div class="card soft">
     <p><b>In short.</b> Setdex works fully without an account, and then your training never leaves
       your phone. With an account, your training is backed up in the EU so you can restore it on
       another phone. Crash reports carry no personal data. Anonymous usage statistics are sent only
-      if you turn them on. We never sell data and never show ads.</p>
+      if you turn them on. If you use Bring my plan, the screenshots or text you add are read by
+      AI and not kept. We never sell data and never show ads.</p>
   </div>
 
   <h2>Who is responsible</h2>
@@ -33,7 +34,8 @@
   <h3>1. On your phone — always</h3>
   <p>Your programmes, days, exercises, workouts, sets (weights, reps, times) and settings are
     stored on your phone. Without an account, this is the only copy: nothing is sent anywhere,
-    except crash reports (section 4) and, if you turn them on, anonymous statistics (section 5).</p>
+    except crash reports (section 4), anonymous statistics if you turn them on (section 5), and
+    what you choose to bring with Bring my plan (section 6).</p>
 
   <h3>2. Your account — only if you sign in</h3>
   <p>You can sign in with Google. Google then shares your <b>name, email address and profile
@@ -59,20 +61,42 @@
     personal data involved.</p>
 
   <h3>5. Anonymous usage statistics — only if you turn them on</h3>
-  <p>Off until you turn it on (Settings → Privacy, or "Yes, share" when the app first asks). If you turn
+  <p>Off until you turn it on (Settings → Data and privacy, or "Yes, share" when the app first asks). If you turn
     it on, Setdex sends counts and choices to <b>PostHog</b> (EU cloud) such as "a workout was
     finished, 45 minutes, 18 sets", "a programme was created", "units changed to kg", how the rest
     timer is set up and the rest times you choose (for example "pull-up: rest 1:30 changed to
-    2:00"; for an exercise you created, only its muscle group, never its name), and, when
+    2:00"; for an exercise you created, only its muscle group, never its name), when
     you use Build my plan, the answers you picked (for example "at home, dumbbells, build muscle,
-    some experience, 3 days, 45 minutes"), together with the app version, phone model, Android
+    some experience, 3 days, 45 minutes"), and, when you use Bring my plan, counts only (for
+    example "3 pictures, read in 20 seconds, 4 days, 24 exercises: 21 matched, 2 to check, 1
+    new, 2 changed before saving" — never the plan, its exercise names or the pictures),
+    together with the app version, phone model, Android
     version, language and a random id for this installation. It never sends your name, email,
     account, the text you type (such as a programme's name), the weights or reps you lift, or
     your IP address, and it is never linked to your account. While it is off, the app does not
     contact PostHog at all. Turning it off stops it immediately and replaces the random id.</p>
   <p><i>Why we may do this:</i> your consent, which you can withdraw at any time in Settings.</p>
 
-  <h2>Who else handles the data</h2>
+  <h3>6. Bring my plan — only if you use it</h3>
+  <p>When you use <b>Bring my plan</b> (it needs an account), the screenshots, photos or text you
+    add are sent, encrypted, to our server (Supabase, Frankfurt, EU) and from there to
+    <b>Anthropic</b> (USA), whose AI model Claude reads the training plan in them. Our server keeps
+    them only in memory for that request and never stores them. Anthropic uses them only to
+    provide this service to us, does not use them to train its models, and deletes them within
+    30 days (longer only if needed to investigate misuse, or by law). Only add what you are happy
+    to have read: crop out names, faces or anything personal that isn't the plan.</p>
+  <p>For each reading we keep a short record linked to your account — when, how many pictures,
+    whether a plan was found and how much processing it used — to apply the free monthly
+    allowance and to see what the feature costs. It is deleted when you delete your account, and
+    after 12 months at the latest.</p>
+  <p>If you have also turned on anonymous statistics (section 5), the names of exercises in your
+    plan that Setdex doesn't have yet (for example "Sled Push") are counted on our server — just
+    the name and a count, not linked to you or your account — so we can add the most wanted
+    ones.</p>
+  <p><i>Why we may do this:</i> it is the service you asked for by using Bring my plan (performing
+    our agreement with you); counting exercise names relies on your consent to statistics.</p>
+
+  <h2>Who else handles the data</h2>)
   <div class="table-wrap">
   <table>
     <thead><tr><th>Service</th><th>For</th><th>Where the data is</th></tr></thead>
@@ -81,6 +105,7 @@
       <tr><td>Google</td><td>"Continue with Google" sign-in</td><td>Google's own policy</td></tr>
       <tr><td>Sentry</td><td>Crash reports</td><td>Germany (EU)</td></tr>
       <tr><td>PostHog</td><td>Anonymous statistics, only if turned on</td><td>EU</td></tr>
+      <tr><td>Anthropic</td><td>Reading the plans you bring (Bring my plan), only if you use it</td><td>USA; deleted within 30 days</td></tr>
       <tr><td>GitHub</td><td>Hosts these web pages</td><td>GitHub's own policy</td></tr>
     </tbody>
   </table>
@@ -96,6 +121,9 @@
       the account and all its training from our servers immediately.</li>
     <li><b>On your phone:</b> until you remove it in the app or uninstall Setdex.</li>
     <li><b>Crash reports:</b> up to 90 days.</li>
+    <li><b>Bring my plan:</b> the screenshots and text are not kept by us; Anthropic deletes them
+      within 30 days. The record of each reading: until you delete your account, at most 12
+      months.</li>
     <li><b>Anonymous statistics:</b> kept to see trends over time; they cannot be linked back to
       you, so they cannot be found or deleted per person.</li>
   </ul>
@@ -103,12 +131,12 @@
   <h2>Your rights</h2>
   <p>You can at any time:</p>
   <ul>
-    <li><b>Get a copy</b> of all your training: Settings → Export my data (a JSON file other apps
+    <li><b>Get a copy</b> of all your training: Settings → Data and privacy → Export my data (a JSON file other apps
       and spreadsheets can read).</li>
     <li><b>Correct</b> anything in the app itself.</li>
-    <li><b>Delete</b> your account and everything in it: Settings → Delete account, or see
+    <li><b>Delete</b> your account and everything in it: Settings → Account → Delete account, or see
       <a href="delete-account.html">Delete your account</a>.</li>
-    <li><b>Withdraw consent</b> for statistics: Settings → Privacy.</li>
+    <li><b>Withdraw consent</b> for statistics: Settings → Data and privacy.</li>
     <li><b>Ask</b> what we hold about you, or object to or restrict its use, by writing to
       <span class="email">contact.plainworklabs@gmail.com</span>. We answer within 30 days.</li>
     <li><b>Complain</b> to a data-protection authority: in Israel, the Privacy Protection Authority;

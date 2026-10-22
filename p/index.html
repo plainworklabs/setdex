@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Setdex programme</title>
+<meta name="description" content="A training programme shared from Setdex — open it in the app to make it yours.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<!-- A programme shared from Setdex (spec §5.4.6). The programme is in the link
+     itself, after the #: it never reaches this site's server — this page reads it
+     in the browser (the app's lib/programmes/share/programme_link.dart writes it).
+     exercises.json names the built-in exercises (app/tool/build_bank.dart). -->
+<main class="page">
+  <header class="top"><a href="../"><img class="mark" src="../mark.svg" alt=""><span class="brand">SETDEX</span></a></header>
+
+  <p class="eyebrow">A Setdex programme</p>
+  <h1 id="name">A training programme</h1>
+  <p class="meta" id="size"></p>
+
+  <div id="android" hidden>
+    <p><a class="play" id="open" href="#">Open in Setdex</a></p>
+    <p class="meta">No Setdex yet? <a href="https://play.google.com/store/apps/details?id=com.getsetdex.app">Get it
+      on Google Play</a> — it's free — then come back to this page and tap Open in Setdex.</p>
+  </div>
+  <div id="elsewhere" hidden>
+    <p class="meta">Setdex is a training log for Android phones. Open this link on your Android phone to add the
+      programme — <a href="https://play.google.com/store/apps/details?id=com.getsetdex.app">Setdex on Google
+      Play</a>.</p>
+  </div>
+
+  <div id="plan"></div>
+
+  <div class="card soft" id="broken" hidden>
+    <p><b>This link doesn't open a programme.</b> It may have been cut short when it was sent — ask for the
+      link again, or for its QR code if you're together.</p>
+  </div>
+  <noscript><div class="card soft"><p>This page needs JavaScript to show the programme. Open the link on an
+    Android phone with Setdex instead.</p></div></noscript>
+
+  <footer>Setdex is made by Plainwork Labs · <a href="../privacy.html">Privacy</a> · <a href="../terms.html">Terms</a></footer>
+</main>
+<script>
+(async () => {
+  const PLAY = 'https://play.google.com/store/apps/details?id=com.getsetdex.app';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  };
+  const time = (low, high) => {
+    if (high < 60) return low === high ? `${low} s` : `${low}–${high} s`;
+    const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    return low === high ? mmss(low) : `${mmss(low)}–${mmss(high)}`;
+  };
+  // As the app writes a target: "3 sets · 8–12 reps", "3 sets · 20–30 s".
+  const target = (sets, low, high, unit) => `${sets} set${sets === 1 ? '' : 's'} · ` +
+      (unit === 'seconds' ? time(low, high) : `${low === high ? low : `${low}–${high}`} reps`);
+
+  try {
+    const raw = location.hash.slice(1);
+    if (!raw.startsWith('1.')) throw new Error('not a programme');
+    const data = raw.slice(2);
+    if (!/^[A-Za-z0-9_-]+$/.test(data)) throw new Error('not a programme');
+    const b64 = data.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(b64 + '==='.slice((b64.length + 3) % 4)), (c) => c.charCodeAt(0));
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    const [version, name, own, days] = JSON.parse(await new Response(stream).text());
+    if (version !== 1 || !Array.isArray(days)) throw new Error('not a programme');
+    const names = await (await fetch('exercises.json')).json();
+
+    const exercise = (ref) => {
+      if (typeof ref === 'number' && ref > 0) {
+        const [n, , unit] = names[ref] || ['An exercise from a newer Setdex', '', 'reps'];
+        return [n, unit];
+      }
+      if (typeof ref === 'number' && own[-ref - 1]) return [own[-ref - 1][0], own[-ref - 1][2] === 's' ? 'seconds' : 'reps'];
+      return [String(ref).replace(/-/g, ' '), 'reps'];
+    };
+
+    document.title = `${name} — a Setdex programme`;
+    $('name').textContent = name;
+    let count = 0;
+    days.forEach(([dayName, , phases], d) => {
+      const card = el('section', 'card day');
+      card.append(el('h2', null, `Day ${d + 1} · ${dayName}`));
+      const plain = phases.length === 1 && !phases[0][1];
+      for (const [phaseName, tick, slots] of phases) {
+        if (!plain) card.append(el('h3', 'phase', tick ? `${phaseName} · tick only` : phaseName));
+        const list = el('ul', 'slots');
+        for (const [ref, sets, low, high] of slots) {
+          const [n, unit] = exercise(ref);
+          const row = el('li');
+          row.append(el('span', null, n), el('span', 'target', target(sets, low, high, unit)));
+          list.append(row);
+          count++;
+        }
+        card.append(list);
+      }
+      $('plan').append(card);
+    });
+    $('size').textContent = `${days.length} ${days.length === 1 ? 'day' : 'days'} · ${count} ${count === 1 ? 'exercise' : 'exercises'}`;
+
+    if (/Android/i.test(navigator.userAgent)) {
+      // Opens Setdex with the programme; without Setdex, Chrome goes to Google Play.
+      $('open').href = `intent://plan?d=1.${data}#Intent;scheme=com.getsetdex.app;package=com.getsetdex.app;` +
+          `S.browser_fallback_url=${encodeURIComponent(PLAY)};end`;
+      $('android').hidden = false;
+    } else {
+      $('elsewhere').hidden = false;
+    }
+  } catch (e) {
+    $('name').textContent = 'A training programme';
+    $('broken').hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
